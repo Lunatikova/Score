@@ -2,10 +2,10 @@
 import streamlit as st
 
 # ------------------- Функция расчёта итоговой оценки -------------------
-def calculate_grade(semester_grade, testing_grade, practical_grade, exam_grade,
-                    w_sem, w_test, w_pract, w_exam):
+def calculate_grade(semester_grade, testing_grade, practical_grade, exam_grade, dop_grade,
+                    w_sem, w_test, w_pract, w_exam, w_dop):
     total = (semester_grade * w_sem + testing_grade * w_test +
-             practical_grade * w_pract + exam_grade * w_exam) / 100
+             practical_grade * w_pract + exam_grade * w_exam + dop_grade * w_dop) / 100
     return total
 
 # ------------------- Интерфейс приложения -------------------
@@ -22,18 +22,19 @@ with col1:
     testing_grade = st.slider("Тестирование", 0, 5, 3, 1)          # целочисленный
     practical_grade = st.slider("Практический навык", 0.0, 5.0, 3.0, 0.1, format="%.2f")
     exam_grade = st.slider("Экзамен", 0, 5, 3, 1)                 # целочисленный
-
+    dop_grade = st.slider("Дополнительный балл", 0, 5, 3, 1)      # целочисленный
 with col2:
     st.subheader("⚖️ Веса компонентов (%)")
     w_sem = st.slider("Вес семестра", 0, 100, 20)
     w_test = st.slider("Вес тестирования", 0, 100, 5)
     w_pract = st.slider("Вес практики", 0, 100, 15)
     w_exam = st.slider("Вес экзамена", 0, 100, 60)
+    w_dop = st.slider("Вес доп.балла", 0, 100, 5)
 
 # Расчёт
-total_weight = w_sem + w_test + w_pract + w_exam
-final_score = calculate_grade(semester_grade, testing_grade, practical_grade, exam_grade,
-                              w_sem, w_test, w_pract, w_exam)
+total_weight = w_sem + w_test + w_pract + w_exam + w_dop
+final_score = calculate_grade(semester_grade, testing_grade, practical_grade, exam_grade, dop_grade,
+                              w_sem, w_test, w_pract, w_exam, w_dop)
 
 st.divider()
 st.subheader("📊 Результат")
@@ -51,6 +52,15 @@ else:
 with st.expander("ℹ️ Как это работает"):
     st.markdown("""
     Формула:  
-    `(Семестр × вес_семестра + Тест × вес_теста + Практика × вес_практики + Экзамен × вес_экзамена) / 100`  
+    `(Семестр × вес_семестра + Тест × вес_теста + Практика × вес_практики + Экзамен × вес_экзамена + Допол.балл × доп.балла ) / 100`  
     Все оценки по 5-балльной шкале. Веса задаются в процентах, в сумме должны давать 100%.
+    Предложение по критериям для дополнительного балла: предложили: 
+    0 - ничего, 
+    3 - начальные условия (например, 100% посещение лекций и т.д.), 
+    4 - средний уровень - все, что учтено в пороговом уровне плюс дополнительные условия, например, участие в локальных мероприятиях 
+    по дисциплине - кафедральные и внутривузовские олимпиады, конкурсы и т.д.; 
+    5 - высокий уровень участия - все, что на первых двух уровнях плюс участие в мероприятиях всероссийских, в том числе региональных 
+    и межрегиональных, и международных.
+    Как пример, если начальный и средний уровень не соблюдены, но есть участие в междунарожных, например, мероприятиях, то оцениваем 
+    как начальный уровень - 3 балла.
     """)
