@@ -25,7 +25,7 @@ with col1:
     dop_grade = st.slider("Дополнительный балл", 0, 5, 3, 1)      # целочисленный
 with col2:
     st.subheader("⚖️ Веса компонентов (%)")
-    w_sem = st.slider("Вес семестра", 0, 100, 20)
+    w_sem = st.slider("Вес семестра", 0, 100, 15)
     w_test = st.slider("Вес тестирования", 0, 100, 5)
     w_pract = st.slider("Вес практики", 0, 100, 15)
     w_exam = st.slider("Вес экзамена", 0, 100, 60)
